@@ -1,6 +1,4 @@
-import { useState } from "react"
-import { EmptyStatement } from "typescript"
-
+import { useState, useEffect } from 'react'
 // Interface is only for Object/Classes
 // interface Posts {
 //     posts: Array<string>
@@ -9,31 +7,37 @@ import { EmptyStatement } from "typescript"
 type Posts = Array<string>
 
 const ListPosts = () => {
-    let [postsData, setPostsData] = useState<Posts | []>([])
+  let [postsData, setPostsData] = useState<Posts | []>([])
 
-    const getPosts = async () => {
-        try {
-            const res = await fetch("/posts")
-            const data = await res.json()
+  const getPosts = async () => {
+    try {
+      const res = await fetch('/posts')
+      console.log(res)
+      const data = await res.json()
+      console.log(data)
 
-            setPostsData(data)
-        } catch (err) {
-            console.log(err)
-        }
+      setPostsData(data)
+    } catch (err) {
+      console.log(err)
     }
+  }
 
-    return (
-        <>
-            <h4>List Posts</h4>
-            {postsData ? 
-                postsData.map((post: string) => {
-                    return (
-                        <p>Testing</p>
-                    )
-                })
-             : <p>No posts</p>}
-        </>
-    )
+  useEffect(() => {
+    getPosts()
+  }, [])
+
+  return (
+    <>
+      <h4>List Posts</h4>
+      {postsData ? (
+        postsData.map((post: string) => {
+          return <p>Testing</p>
+        })
+      ) : (
+        <p>No posts</p>
+      )}
+    </>
+  )
 }
 
 export default ListPosts
