@@ -137,6 +137,7 @@ var express = require('express')
 var database_1 = require('./database')
 var app = express()
 var port = 8000
+app.use(express.json())
 // GET posts
 app.get('/posts', function (req, res) {
   return __awaiter(void 0, void 0, void 0, function () {
@@ -151,6 +152,7 @@ app.get('/posts', function (req, res) {
           ]
         case 1:
           allPosts = _a.sent()
+          console.log(allPosts.rows)
           res.json(allPosts.rows)
           return [3 /*break*/, 3]
         case 2:
@@ -186,6 +188,35 @@ app.post('/posts', function (req, res) {
         case 2:
           err_2 = _a.sent()
           console.error(err_2)
+          return [3 /*break*/, 3]
+        case 3:
+          return [2 /*return*/]
+      }
+    })
+  })
+})
+app['delete']('/posts/:post_id', function (req, res) {
+  return __awaiter(void 0, void 0, void 0, function () {
+    var post_id, deletePost, err_3
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          _a.trys.push([0, 2, , 3])
+          post_id = req.params.post_id
+          return [
+            4 /*yield*/,
+            database_1['default'].query(
+              'DELETE FROM posts WHERE post_id = $1',
+              [post_id]
+            ),
+          ]
+        case 1:
+          deletePost = _a.sent()
+          res.json('Post was deleted.')
+          return [3 /*break*/, 3]
+        case 2:
+          err_3 = _a.sent()
+          console.log(err_3)
           return [3 /*break*/, 3]
         case 3:
           return [2 /*return*/]

@@ -1,24 +1,36 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, SyntheticEvent } from 'react'
 // Interface is only for Object/Classes
-// interface Posts {
-//     posts: Array<string>
-// }
 
-type Posts = Array<string>
+interface Post {
+  post_id: number
+  text: string
+}
+
+type PostData = Array<string>
 
 const ListPosts = () => {
-  let [postsData, setPostsData] = useState<Posts | []>([])
+  let [postsData, setPostsData] = useState<PostData | []>([])
 
   const getPosts = async () => {
     try {
       const res = await fetch('/posts')
-      console.log(res)
       const data = await res.json()
-      console.log(data)
 
       setPostsData(data)
     } catch (err) {
       console.log(err)
+    }
+  }
+
+  const deletePost = async (id: number) => {
+    try {
+      const deletePost = await fetch(`/posts/${id}`, {
+        method: 'DELETE',
+      })
+      console.log(deletePost)
+      setPostsData(postsData.filter((post: any) => post.post_id !== id))
+    } catch (err) {
+      console.error(err)
     }
   }
 
@@ -30,8 +42,16 @@ const ListPosts = () => {
     <>
       <h4>List Posts</h4>
       {postsData ? (
-        postsData.map((post: string) => {
-          return <p>Testing</p>
+        postsData.map((post: any) => {
+          return (
+            <div key={post.post_id}>
+              <p>{post.text}</p>
+              <button onClick={(e: SyntheticEvent) => deletePost(post.post_id)}>
+                D
+              </button>
+              <button>E</button>
+            </div>
+          )
         })
       ) : (
         <p>No posts</p>

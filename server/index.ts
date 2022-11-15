@@ -1,11 +1,9 @@
 import * as express from 'express'
 import pool from './database'
-import cors from 'cors'
 
 const app = express()
 const port = 8000
 
-app.use(cors())
 app.use(express.json())
 
 // GET posts
@@ -31,6 +29,20 @@ app.post('/posts', async (req: any, res: any) => {
     res.json(newPost.rows[0])
   } catch (err) {
     console.error(err)
+  }
+})
+
+app.delete('/posts/:post_id', async (req: any, res: any) => {
+  try {
+    const { post_id } = req.params
+    const deletePost = await pool.query(
+      'DELETE FROM posts WHERE post_id = $1',
+      [post_id]
+    )
+
+    res.json('Post was deleted.')
+  } catch (err) {
+    console.log(err)
   }
 })
 
