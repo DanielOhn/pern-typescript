@@ -10,7 +10,6 @@ app.use(express.json())
 app.get('/posts', async (req: any, res: any) => {
     try {
         const allPosts = await pool.query('SELECT * FROM posts')
-        console.log(allPosts.rows)
         res.json(allPosts.rows)
     } catch (err) {
         console.error(err)
@@ -59,7 +58,7 @@ app.delete('/posts/:post_id', async (req: any, res: any) => {
 
         res.json('Post was deleted.')
     } catch (err) {
-        console.log(err)
+        console.error(err)
     }
 })
 
